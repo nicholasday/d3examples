@@ -1,0 +1,64 @@
+Bureau of Justice Statistics,,
+Filename: hus11f01.csv,,
+"Report title: Homicide in the U.S. Known to Law Enforcement, 2011",,
+Data source: Supplementary Homicide Report,,
+Authors: Erica Smith and Alexia Cooper,,
+Refer questions to: askbjs@usdoj.gov (202) 307-0765,,
+Date of version: 12/30/13,,
+,,
+"Figure 1. Number and rate of homicides in the U.S., 1960–2011",,
+Year,Estimated Number of Homicides,"Homicide rate per 100,000 population"
+'60,"9,110",5.1
+,"8,740",4.8
+,"8,530",4.6
+,"8,640",4.6
+,"9,360",4.9
+'65,"9,960",5.1
+,"11,040",5.6
+,"12,240",6.2
+,"13,800",6.9
+,"14,760",7.3
+'70,"16,000",7.9
+,"17,780",8.6
+,"18,670",9
+,"19,640",9.4
+,"20,710",9.8
+'75,"20,510",9.6
+,"18,780",8.8
+,"19,120",8.8
+,"19,560",9
+,"21,460",9.7
+'80,"23,040",10.2
+,"22,520",9.8
+,"21,010",9.1
+,"19,308",8.3
+,"18,692",7.9
+'85,"18,976",7.9
+,"20,613",8.6
+,"20,096",8.3
+,"20,675",8.4
+,"21,500",8.7
+'90,"23,438",9.4
+,"24,703",9.8
+,"23,760",9.3
+,"24,526",9.5
+,"23,326",9
+'95,"21,606",8.2
+,"19,645",7.4
+,"18,208",6.8
+,"16,974",6.3
+,"15,522",5.7
+2000,"15,586",5.5
+,"16,037",5.6
+,"16,229",5.6
+,"16,529",5.7
+,"16,147",5.5
+'05,"16,739",5.7
+,"17,310",5.8
+,"17,127",5.7
+,"16,465",5.4
+,"15,399",5
+'10,"14,722",4.8
+'11,"14,612",4.7
+Note: Includes murder and nonnegligent manslaughter only.,,
+"Source: Federal Bureau of Investigation, Uniform Crime Reporting Program, 1960–2011.",,
