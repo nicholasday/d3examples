@@ -7,6 +7,9 @@
     <body>
         <script type="text/javascript">
             d3.select("body").append("p").text("New paragraph!");
+		d3.csv("hus11f01.csv", function(data) {
+   		 console.log(data);
+		});
         </script>
     </body>
 </html>
