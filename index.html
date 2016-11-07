@@ -11,8 +11,8 @@
 		d3.csv("HomicideDataset.csv", function(data) {
    		  dataset = data;
 		  console.log(data); //Log output to console
+		  svgPractice()
 		  printExcel();
-
 		});
 
 		d3.json("YouthTobaccoUse.json", function(json) {
@@ -48,6 +48,13 @@
 
 		  svg.selectAll("rect")
 		    .data(dataset)
+		    .enter()
+		    .append("rect")
+                    .attr("height",10)
+                    .attr("width",5)
+		    .attr("x", function(d,i) {
+		      return 6*i;
+		    });
 		}
 
         </script>
