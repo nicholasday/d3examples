@@ -22,7 +22,7 @@
         var svg = d3.select("body").append("svg");
         svg.append("width", width);
         svg.append("height", height);
-        svg.selectAll("rect").data(dataset).enter().append("rect").attr("height", 10).attr("width", 5);
+        svg.selectAll("rect").data(dataset).enter().append("rect").attr("height", 10).attr("width", 50).attr("x",function (d, i) { return 60*i});
     }
 
 </script>
