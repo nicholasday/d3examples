@@ -8,14 +8,22 @@
         <script type="text/javascript">
 		var dataset;
 
+		d3.csv("HomicideDataset.csv", function(data) {
+   		  dataset = data;
+		  console.log(data); //Log output to console
+		  printExcel();
+
+		});
+
+		d3.json("YouthTobaccoUse.json", function(json) {
+   		 console.log(json);  //Log output to console
+		});
+
 		function isEven(n) {
 		   return n % 2 == 0;
 		}
 
-		d3.csv("HomicideDataset.csv", function(data) {
-   		  dataset = data;
-		  console.log(data); //Log output to console
-
+		function printExcel() {
 		  d3.select("body").selectAll("p")
     		    .data(dataset)
     		    .enter()
@@ -28,16 +36,19 @@
 			return "red";
 		      }
 		    });
+		}
 
-		});
+		function svgPractice() {
+		  var w = 1000;
+		  var h = 400;
+		  var svg = d3.select("body")
+		    .append("svg")
+		    .attr("width",w)
+		    .attr("height",h);
 
-
-
-
-		d3.json("YouthTobaccoUse.json", function(json) {
-   		 console.log(json);  //Log output to console
-		});
-
+		  svg.selectAll("rect")
+		    .data(dataset)
+		}
 
         </script>
     </body>
