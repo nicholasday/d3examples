@@ -6,15 +6,23 @@
     </head>
     <body>
         <script type="text/javascript">
-           	d3.select("body").append("p").text("New paragraph!");
-
-		d3.csv("HomicideDataset.csv", function(data) {
-   		 console.log(data); //Log output to console
-		});
-
-		d3.json("YouthTobaccoUse.json", function(json) {
-   		 console.log(json);  //Log output to console
-		});
+			var dataset;
+			d3.text("HomicideDataset.csv", function(error, text) {
+				text = text.split("\n").slice(10, -3).join('\n');
+				var lastNumber = 0;
+				var data = d3.csvParseRows(text, function(d, i) {
+				dataset=data;
+			})
+			d3.select("body").selectAll("p")
+				.data(dataset)
+				.enter()
+				.append("p")
+				.text("New paragraph!");
+			})	
+			//d3.json("YouthTobaccoUse.json", function(json) {
+			//	console.log(json);  //Log output to console
+			//});
+			
         </script>
     </body>
 </html>
