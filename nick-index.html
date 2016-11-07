@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>D3 Page Template</title>
+    <script type="text/javascript" src="d3.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+d3.text("HomicideDataset.csv", function(error, text) {
+    text = text.split("\n").slice(10, -3).join('\n');
+    var lastNumber = 0;
+
+    var data = d3.csvParseRows(text, function(d, i) {
+        if (d[0].substring(0, 1) == "'") {
+            var year = parseInt(d[0].substring(1));
+            if (year < 60) {
+                year += 2000;
+            } else {
+                year += 1900;
+            }
+            lastNumber = year;
+        } else if (d[0] == "") {
+            lastNumber += 1;
+            var year = lastNumber;
+        } else {
+            var year = parseInt(d[0]);
+        }
+                
+        arr = [year, parseInt(d[1].replace(',', '')), parseFloat(d[2])];
+        return arr;
+    });
+
+	var width = 1250;
+    var height = 200;
+	var padding = 30;
+	var w = 1250;
+	var h = height - padding;
+
+	var yScale = d3.scaleLinear()
+				   .domain(d3.extent(data, function(arr) {
+				       return arr[1];
+                   }))	
+				   .range([0, h])
+
+	var xScale = d3.scaleBand()
+				   .domain(data.map(function(d) { return d[0]; }))
+				   .rangeRound([0, w])
+				   .paddingInner(0.1);
+
+    var ticks = xScale.domain().filter(function(d,i){ return !(i%10); } );
+
+	var xAxis = d3.axisBottom(xScale)
+				   .tickValues(ticks);
+    
+
+	var color = d3.scaleSequential(d3.interpolatePlasma)
+			      .domain([d3.max(data, function(d) {
+			          return d[1];
+                  }), d3.min(data, function(d) {
+                      return d[1];
+                  })]);
+
+    var svg = d3.select('body')
+                .append('svg');
+
+    svg.attr("width", width)
+	   .attr("height", height);
+
+	svg.append("g")
+		  .attr("class", "x axis")
+		  .attr("transform", "translate(0," + (h) + ")")
+		  .call(xAxis);
+		  //.selectAll("text")
+		  //.style("text-anchor", "end")
+		  //.attr("dx", "-.8em")
+		  //.attr("dy", "-.55em")
+		  //.attr("transform", "rotate(-90)" );
+
+	var rects = svg.selectAll("rect")
+					 .data(data)
+					 .enter()
+					 .append("rect");
+
+	rects.attr('x', function(d) {
+		     return xScale(d[0]);
+		 })
+		 .attr('fill', function(d) {
+		     return color(d[1]);
+		 })
+		 .attr('y', function(d) {
+			 return (h - (yScale(d[1])));
+		 })
+         .attr('width', function(d, i) {
+		     return xScale.bandwidth();
+		 })
+		 .attr('height', function(d) {
+		     return yScale(d[1]);
+		 });
+
+});
+
+d3.json("YouthTobaccoUse.json", function(json) {
+});
+</script>
+</body>
+</html>
