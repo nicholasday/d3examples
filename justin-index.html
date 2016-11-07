@@ -10,14 +10,18 @@
     d3.csv("HomicideDataset.csv", 0, function (data) {
         console.log(data);
         dataset = data;
+        bargraph();
     });
-    console.log(dataset);
-    var width = 1000;
-    var height = 400;
-    var svg = d3.select("body").append("svg");
-    svg.append("width", width);
-    svg.append("height", height);
-    svg.append("circle").attr("r", 100);
+
+    function bargraph() {
+        console.log(dataset);
+        var width = 1000;
+        var height = 400;
+        var svg = d3.select("body").append("svg");
+        svg.append("width", width);
+        svg.append("height", height);
+        svg.append("circle").attr("r", 100);
+    }
 
 </script>
 </body>
