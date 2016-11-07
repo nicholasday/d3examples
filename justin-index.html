@@ -9,11 +9,9 @@
     var dataset;
     d3.csv("HomicideDataset.csv", 0, function (data) {
         console.log(data);
-
-
-
-
+        dataset = data;
     });
+    console.log(dataset);
     var width = 1000;
     var height = 400;
     var svg = d3.select("body").append("svg");
