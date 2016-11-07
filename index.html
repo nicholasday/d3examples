@@ -6,7 +6,27 @@
     </head>
     <body>
         <script type="text/javascript">
-           	d3.select("body").append("p").text("New paragraph!");
+		var dataset = [ 5, 10, 15, 20, 25 ];
+		
+
+		function isEven(n) {
+		   return n % 2 == 0;
+		}
+
+		d3.select("body").selectAll("p")
+    		  .data(dataset)
+    		  .enter()
+    		  .append("p")
+    		  .text(function(d) { return "I can count up to " + d; })
+		  .style("color", function(d) {
+		    if (isEven(d)) {
+			return "red";
+		    } else {
+			return "black";
+		    }
+                  });
+
+           	//d3.select("body").append("p").text("New paragraph!");
 
 		d3.csv("HomicideDataset.csv", function(data) {
    		 console.log(data); //Log output to console
@@ -15,6 +35,8 @@
 		d3.json("YouthTobaccoUse.json", function(json) {
    		 console.log(json);  //Log output to console
 		});
+
+
         </script>
     </body>
 </html>
