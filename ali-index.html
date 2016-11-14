@@ -1,0 +1,165 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>D3 Page Template</title>
+        <script type="text/javascript" src="d3.js"></script>
+	<style>
+	  div.bar {
+ 	   display: inline-block;
+ 	   width: 20px;
+ 	   height: 75px;   /* We'll override height later */
+ 	   background-color: teal;
+	   margin-right: 5px;
+	  }
+	</style>
+    </head>
+    <body>
+        <script type="text/javascript">
+		var dataset;
+
+		d3.csv("HomicideDataset.csv", function(data) {
+   		  dataset = data;
+		  console.log(data); //Log output to console
+		  chapterSixSvgBars();
+
+		});
+
+		d3.json("YouthTobaccoUse.json", function(json) {
+   		 console.log(json);  //Log output to console
+		});
+
+////////////////Functions////////////////////////
+
+		function isEven(n) {
+		   return n % 2 == 0;
+		}
+
+		function printExcel() {
+		  d3.select("body").selectAll("p")
+    		    .data(dataset)
+    		    .enter()
+    		    .append("p")
+    		    .text(function(d) { return d.Number.split(",").join("") + " | " + d.Rate + " | " + d.Year ; })
+		    .style("color", function(d) { 
+		      if (isEven(parseInt(d.Number.split(",").join("")))) {
+			return "black";
+		      } else {
+			return "red";
+		      }
+		    });
+		}
+
+		function chapterSixHtmlBars() {
+		  d3.select("body").selectAll("div")
+    		    .data(dataset)
+    		    .enter()
+    		    .append("div")
+    		    .attr("class", "bar")
+		    .style("height", function(d) {
+		      var barHeight = d.Rate * 5;
+   		      return barHeight + "px";
+		    });
+		}
+
+		function chapterSixSvgBars() {
+		  var w = 1500;
+		  var h = 100;
+		  var barPadding = 1;
+
+		  var svg = d3.select("body")
+		    .append("svg")
+		    .attr("width", w)
+   		    .attr("height", h);
+
+		  svg.selectAll("rect")
+		     .data(dataset)
+		     .enter()
+		     .append("rect")
+		     .attr("x", function(d,i){
+			return i * (w/dataset.length);
+		     })
+		     .attr("y", function(d) {
+			return h - (d.Rate * 4);
+		     })
+		     .attr("width", w / dataset.length - barPadding)
+		     .attr("height", function(d) {
+			return d.Rate * 4;
+		     })
+		     .attr("fill", function(d) {
+			return "rgb(0,0, " + (d.Rate * 10) + ")";
+		     });
+
+		  svg.selectAll("text")
+   		    .data(dataset)
+   		    .enter()
+   		    .append("text")
+		    .text(function(d) {
+		      return d.Rate;
+		    })
+		    .attr("x", function(d,i){
+			return i * (w/dataset.length) + (w / dataset.length - barPadding) / 2;
+		    })
+		    .attr("y", function(d) {
+			return h - (d.Rate * 4) + 15;
+		    })
+   		    .attr("font-family", "sans-serif")
+   		    .attr("font-size", "11px")
+  		    .attr("fill", "white")
+ 		    .attr("text-anchor", "middle");
+
+
+
+		}
+
+		function chapterSixSvgCircles() {
+		  var h = 50;
+		  var w = 1000;
+		  var svg = d3.select("body")
+		    .append("svg")
+		    .attr("width", w)
+   		    .attr("height", h);
+
+		  var circles = svg.selectAll("circle")
+    		    .data(dataset)
+   		    .enter()
+    		    .append("circle");
+			
+		  circles.attr("cx", function(d, i) {
+            	    	  return (i * 25) + 12.5;
+        	 	})
+       		        .attr("cy", h/2)
+                        .attr("r", function(d) {
+           		  return d.Rate;
+       		 	})
+			.attr("fill", "yellow")
+			.attr("stroke", "orange")
+			.attr("stroke-width", function(d) {
+			  return d.Rate / 4
+			});
+			
+
+
+		}
+
+		function svgPractice() {
+		  var w = 1000;
+		  var h = 400;
+		  var svg = d3.select("body")
+		    .append("svg")
+		    .attr("width",w)
+		    .attr("height",h);
+
+		  svg.selectAll("rect")
+		    .data(dataset)
+		    .enter()
+		    .append("rect")
+                    .attr("height",10)
+                    .attr("width",5)
+		    .attr("x", function(d,i) {
+		      return 6*i;
+		    });
+		}
+
+        </script>
+    </body>
+</html>
