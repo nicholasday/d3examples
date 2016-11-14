@@ -34,7 +34,7 @@
 		    });
 		}
 		function svgPractice() {
-		  var w = 1000;
+		  var w = 1200;
 		  var h = 400;
 		  var barPadding = 1;
 		  var svg = d3.select("body")
@@ -45,25 +45,30 @@
 		    .data(dataset)
 		    .enter()
 		    .append("rect")
-      		.attr("x", function(d, i) { console.log(i);return i * (w / dataset.length); })
+      		.attr("x", function(d, i) { return i * (w / dataset.length); })
       		.attr("y", function(d) { return h - (d.Rate * 20); })
       		.attr("width", w / dataset.length - barPadding)
       		.attr("height", function(d) { return d.Rate*20; })
       		.attr("fill", function(d) { return "rgb(0, 0, " + (d.Rate * 20) + ")"; })
       		;
           svg.selectAll("text")
-         .data(dataset)
-         .enter()
-         .append("text")
-         .text(function(d) {
-              return d.Rate;
-         })
-         .attr("x", function(d, i) {
-              return i * (w / dataset.length);
-         })
-         .attr("y", function(d) {
-              return h - (d.Rate * 20);
-         });
+           .data(dataset)
+           .enter()
+           .append("text")
+           .text(function(d) {
+                return d.Rate;
+           })
+           .attr("x", function(d, i) {
+                return i * (w / dataset.length)+(w / dataset.length)/2;
+           })
+           .attr("y", function(d) {
+                return h - (d.Rate * 20)+14;
+           })
+           .attr("font-family","arial")
+           .attr("font-size","10px")
+           .attr("fill","white")
+           .attr("text-anchor","middle")
+          ;
       		}
         </script>
     </body>
