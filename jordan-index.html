@@ -70,20 +70,42 @@
            .attr("fill","white")
            .attr("text-anchor","middle")
           ;
+          var h2 = h-30;
+          var w2 = w-30
+          var x = d3.scaleLinear()
+                    .domain(d3.extent(dataset, function(d){
+                        return parseInt(d.Number.split(",").join(""));
+                    }))
+                    .range([15, w]);
+          var y = d3.scaleLinear()
+                    .domain(d3.extent(dataset, function(d){
+                        return parseInt(d.Rate);
+                    }))
+                    .range([h2,15]);
 
           var svg = d3.select("body")
             .append("svg")
-            .attr("width", w)
-            .attr("height", h);
+            .attr("width", w+15)
+            .attr("height", h2+15);
+          var lineFunction = d3.line()
+                          .x(function(d) { return parseInt(d.Number.split(",").join(""))})
+                          .y(function(d) { return d.Rate; })
+                          .interpolate("linear");
+          var lineGraph = svg.append("path")
+                                    .attr("d", lineFunction(lineData))
+                                    .attr("stroke", "blue")
+                                    .attr("stroke-width", 2)
+                                    .attr("fill", "none");
           svg.selectAll("circle")
             .data(dataset)
             .enter()
             .append("circle")
-            .attr("cx",function(d){
-              return d.Year;
+            .attr("cx", function(d){
+              return x(parseInt(d.Number.split(",").join("")));
+              //return x(d.Number);
             })
             .attr("cy", function(d){
-              return d.Rate;
+              return y(d.Rate);
             })
             .attr("r",5);
       		}
