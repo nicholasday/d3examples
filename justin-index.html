@@ -7,9 +7,7 @@
 <body>
 <script type="text/javascript">
     var dataset;
-    var years;
-    var numbers;
-    var rates;
+
     d3.csv("HomicideDataset.csv", 0, function (data) {
         dataset = data;
         bargraph();
@@ -18,16 +16,16 @@
     function bargraph() {
         var width = 1920;
         var height = 1080;
-        var barPadding = 5;
+        var barPadding = 2;
         var chartHeight = 200;
-        var chartWidth = 500;
+        var chartWidth = 1000;
         var barWidth = chartWidth/dataset.length;
         var heightScaleFactor = chartHeight / d3.max(dataset, function (d) { return d.Rate });
         var svg = d3.select("body").append("svg");
         svg.append("width", width);
         svg.append("height", height);
-        svg.selectAll("rect").data(dataset).enter().append("rect").attr("height", function (d) { return d.Rate * heightScaleFactor }).attr("width", barWidth).attr("x", function (d, i) { return (barWidth + barPadding) * i }).attr("y", function (d, i) { return chartHeight - d.Rate * heightScaleFactor }).attr("fill", function (d) { return "rgb(" + d.Rate * 10 + ",0,0)" });
-        svg.selectAll("text").data(dataset).enter().append("text").text(function (d) { return d.Rate }).attr("x", function (d, i) { return (barWidth+barPadding) * i }).attr("y", function (d) { return chartHeight-d.Rate * heightScaleFactor }).attr("font-size", "20px").attr("text-anchor", "middle").attr("fill","blue");
+        svg.selectAll("rect").data(dataset).enter().append("rect").attr("height", function (d) { return d.Rate * heightScaleFactor }).attr("width", barWidth-barPadding).attr("x", function (d, i) { return (barWidth + barPadding) * i }).attr("y", function (d, i) { return chartHeight - d.Rate * heightScaleFactor }).attr("fill", function (d) { return "rgb(" + d.Rate * 20 + ",0,0)" });
+        svg.selectAll("text").data(dataset).enter().append("text").text(function (d) { return d.Rate }).attr("x", function (d, i) { return (barWidth+barPadding) * i }).attr("y", function (d) { return chartHeight-d.Rate * heightScaleFactor }).attr("font-size", "15px").attr("text-anchor", "middle").attr("fill","blue");
     }
 
 </script>
