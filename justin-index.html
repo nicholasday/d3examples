@@ -16,14 +16,18 @@
     });
 
     function bargraph() {
-        console.log(dataset);
         var width = 1920;
         var height = 1080;
+        var barWidth = 15;
+        var barPadding = 5;
+        var chartHeight = 200;
+        var chartWidth = 500;
+        var heightScaleFactor = chartHeight/d3.max(dataset, function (d) { return d.Rate});
         var svg = d3.select("body").append("svg");
         svg.append("width", width);
         svg.append("height", height);
-        svg.selectAll("rect").data(dataset).enter().append("rect").attr("height", function (d) { return d.Rate * 10 }).attr("width", 10).attr("x", function (d, i) { return 15 * i }).attr("y",function(d,i){return 100-d.Rate*10});
-        svg.selectAll("text").data(dataset).enter().append("text").text(function (d) { return d.Rate }).attr("x", function (d, i) { return 15 * i }).attr("y", function (d) { return 100-d.Rate * 10 }).attr("font-size", "10px").attr("text-anchor", "middle").attr("fill","white");
+        svg.selectAll("rect").data(dataset).enter().append("rect").attr("height", function (d) { return d.Rate * 10 }).attr("width", barWidth).attr("x", function (d, i) { return (barWidth+barPadding) * i }).attr("y",function(d,i){return chartHeight-d.Rate*heightScaleFactor});
+        svg.selectAll("text").data(dataset).enter().append("text").text(function (d) { return d.Rate }).attr("x", function (d, i) { return (barWidth+barPadding) * i }).attr("y", function (d) { return chartHeight-d.Rate * heightScaleFactor }).attr("font-size", "10px").attr("text-anchor", "middle").attr("fill","blue");
     }
 
 </script>
