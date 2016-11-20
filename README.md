@@ -1,6 +1,6 @@
 #D3Examples
 
-View live Github Pages of Repo - https://nicholasday.github.io/d3examples/<html file name>
+View live Github Pages of Repo - https://nicholasday.github.io/d3examples/(file name)
 
 #Dates
 
