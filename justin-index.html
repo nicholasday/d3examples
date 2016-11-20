@@ -17,12 +17,13 @@
 
     function bargraph() {
         console.log(dataset);
-        var width = 1000;
-        var height = 400;
+        var width = 1920;
+        var height = 1080;
         var svg = d3.select("body").append("svg");
         svg.append("width", width);
         svg.append("height", height);
-        svg.selectAll("rect").data(dataset).enter().append("rect").attr("height", 10).attr("width", 50).attr("x",function (d, i) { return 60*i});
+        svg.selectAll("rect").data(dataset).enter().append("rect").attr("height", function (d) { return d.Rate * 10 }).attr("width", 10).attr("x", function (d, i) { return 15 * i });
+        svg.selectAll("text").data(dataset).enter().append("text").text(function (d) { return d.Rate }).attr("x", function (i) { return 15 * i }).attr("y", function (d) { return d.Rate*10-10}).attr("font-size","10px");
     }
 
 </script>
