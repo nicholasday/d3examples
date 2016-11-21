@@ -35,100 +35,109 @@
 		}
 
 		function svgPractice() {
-		  var w = 1200;
-		  var h = 250;
-		  var barPadding = 1;
-		  var svg = d3.select("body")
-		    .append("svg")
-		    .attr("width",w)
-		    .attr("height",h);
-		  svg.selectAll("rect")
-		    .data(dataset)
-		    .enter()
-		    .append("rect")
-      		.attr("x", function(d, i) { return i * (w / dataset.length); })
-      		.attr("y", function(d) { return h - (d.Rate * 20); })
-      		.attr("width", w / dataset.length - barPadding)
-      		.attr("height", function(d) { return d.Rate*20; })
-      		.attr("fill", function(d) { return "rgb(0, 0, " + (d.Rate * 20) + ")"; })
-      		;
-          svg.selectAll("text")
-           .data(dataset)
-           .enter()
-           .append("text")
-           .text(function(d) {
-                return d.Rate;
-           })
-           .attr("x", function(d, i) {
-                return i * (w / dataset.length)+(w / dataset.length)/2;
-           })
-           .attr("y", function(d) {
-                return h - (d.Rate * 20)+14;
-           })
-           .attr("font-family","arial")
-           .attr("font-size","10px")
-           .attr("fill","white")
-           .attr("text-anchor","middle")
-          ;
+            var w = 1200;
+            var h = 250;
+            var barPadding = 1;
+            var svg = d3.select("body")
+                .append("svg")
+                .attr("width",w)
+                .attr("height",h);
+            svg.selectAll("rect")
+                .data(dataset)
+                .enter()
+                .append("rect")
+                .attr("x", function(d, i) { return i * (w / dataset.length); })
+                .attr("y", function(d) { return h - (d.Rate * 20); })
+                .attr("width", w / dataset.length - barPadding)
+                .attr("height", function(d) { return d.Rate*20; })
+                .attr("fill", function(d) { return "rgb(0, 0, " + (d.Rate * 20) + ")"; })
+            ;
+            svg.selectAll("text")
+                .data(dataset)
+                .enter()
+                .append("text")
+                .text(function(d) {
+                    return d.Rate;
+                })
+                .attr("x", function(d, i) {
+                    return i * (w / dataset.length)+(w / dataset.length)/2;
+                })
+                .attr("y", function(d) {
+                    return h - (d.Rate * 20)+14;
+                })
+                .attr("font-family","arial")
+                .attr("font-size","10px")
+                .attr("fill","white")
+                .attr("text-anchor","middle")
+            ;
             
 //ScatterPlot
-          var h2 = h-30;
-          var w2 = w-30
+            var h2 = h-30;
+            var w2 = w-30
 
-          var x = d3.scaleLinear()
-                    .domain(d3.extent(dataset, function(d){
-                        return d.Year;
-                    }))
-                    .range([15, w2]);
-          var y = d3.scaleLinear()
-                    .domain(d3.extent(dataset, function(d){
-                        return parseInt(d.Rate);
-                    }))
-                    .range([h2,15]);
+            var x = d3.scaleLinear()
+                .domain(d3.extent(dataset, function(d){
+                    return d.Year;
+                }))
+                .range([15, w2]);
+            var y = d3.scaleLinear()
+                .domain(d3.extent(dataset, function(d){
+                    return parseInt(d.Rate);
+                }))
+                .range([h2,15]);
+            
+//            var yAxis = d3.axisLeft(y);
+//            var xAxis = d3.svg.axis()
+//                .scale(x)
+//                .orient("bottom");
+//            svg.append("g")
+//                .call(d3.svg.axis()
+//                .scale(x)
+//                .orient("bottom"));
 
-          var svg = d3.select("body")
-            .append("svg")
-            .attr("width", w2+15)
-            .attr("height", h2+15);
-          var lineFunction = d3.line()
-              .x(function(d) { return x(d.Year)})
-              .y(function(d) { return y(d.Rate)});
-          var lineGraph = svg.append("path")
+            var svg = d3.select("body")
+                .append("svg")
+                .attr("width", w2+15)
+                .attr("height", h2+15);
+            var lineFunction = d3.line()
+                .x(function(d) { return x(d.Year)})
+                .y(function(d) { return y(d.Rate)});
+            var lineGraph = svg.append("path")
                 .attr("d", lineFunction(dataset))
                 .attr("stroke", "blue")
                 .attr("stroke-width", 2)
                 .attr("fill", "none");
-          svg.selectAll("circle")
-            .data(dataset)
-            .enter()
-            .append("circle")
-            .attr("cx", function(d){
-              return x(d.Year);
-            })
-            .attr("cy", function(d){
-              return y(d.Rate);
-            })
-            .attr("r", function(d){
-              return 5;
-              //return Math.sqrt(h-y(d.Rate))
-          });
-        svg.selectAll("text")
-            .data(dataset)
-            .enter()
-            .append("text")
-            .text(function(d){
-                return d.Year + "," + d.Rate;
-            })
-            .attr("x", function(d) {
-                return x(d.Year);
-            })
-            .attr("y", function(d) {
-                return y(d.Rate);    
-            })
-            .attr("font-family", "sans-serif")
-            .attr("font-size",  "11px")
-            .attr("fill", "red");
-      		}
+            svg.selectAll("circle")
+                .data(dataset)
+                .enter()
+                .append("circle")
+                .attr("cx", function(d){
+                  return x(d.Year);
+                })
+                .attr("cy", function(d){
+                  return y(d.Rate);
+                })
+                .attr("r", function(d){
+                  return 5;
+                  //return Math.sqrt(h-y(d.Rate))
+            });
+            svg.selectAll("text")
+                .data(dataset)
+                .enter()
+                .append("text")
+                .text(function(d){
+                    return d.Year + "," + d.Rate;
+                })
+                .attr("x", function(d) {
+                    return x(d.Year);
+                })
+                .attr("y", function(d) {
+                    return y(d.Rate);    
+                })
+                .attr("font-family", "sans-serif")
+                .attr("font-size",  "11px")
+                .attr("fill", "red");
+            }
         </script>
     </body>
 </html>
