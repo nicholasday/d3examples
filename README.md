@@ -2,6 +2,8 @@
 
 View live Github Pages of Repo - https://nicholasday.github.io/d3examples/(file name)
 
+Book - http://chimera.labs.oreilly.com/books/1230000000345/index.html
+
 #Dates
 
 11/21/16 - Finish up to chapter 8, prepare for chapter 9
