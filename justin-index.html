@@ -37,8 +37,8 @@
         var yMax = d3.max(dataset, function (d) { return parseInt(d.Rate) });
         var x = d3.scaleLinear().domain([xMin, xMax]).range([10, chartWidth]);
         var y = d3.scaleLinear().domain([yMin, yMax]).range([0, chartHeight]);
-        var xAxis = d3.axisTop().scale(x);
-        svg2.append("g").attr("class", "x axis").call(xAxis);
+        var xAxis = d3.axisBottom().scale(x);
+        svg2.append("g").attr("class", "x axis").attr("transform","translate(0,"+chartHeight+")").call(xAxis);
         var line=d3.line().x(function(d){return x(d.Year)}).y(function(d){return chartHeight-y(d.Rate)});
         svg2.append("path").attr("d", line(dataset)).attr("stroke-width",1).attr("fill","none").attr("stroke","red");
         svg2.selectAll("circle").data(dataset).enter().append("circle").attr("r", function (d) { return d.Rate * circleScalingFactor }).attr("cx", function (d) { return (x(d.Year))}).attr("cy", function(d){return chartHeight-y(d.Rate)}).attr("fill", "black");
