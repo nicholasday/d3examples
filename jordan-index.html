@@ -7,12 +7,12 @@
     <body>
         <script type="text/javascript">
 		var dataset;
-		d3.csv("HomicideDataset.csv", function(data) {
-   		  dataset = data;
-		  console.log(data); //Log output to console
-		  svgPractice()
-		  printExcel();
-		});
+        d3.csv("HomicideDataset.csv", function(data) {
+          dataset = data;
+          console.log(data); //Log output to console
+          svgPractice()
+          printExcel();
+        });
 		d3.json("YouthTobaccoUse.json", function(json) {
    		 console.log(json);  //Log output to console
 		});
