@@ -32,7 +32,7 @@
         svg.attr("height", height);
         var circleScalingFactor = 10 / d3.max(dataset, function (d) { return d.Rate });
         var xMin = d3.min(dataset, function (d) { return d.Year });
-        var xMax = d3.max(dataset, function (d) { return d.year });
+        var xMax = d3.max(dataset, function (d) { return d.Year });
         var yMin = d3.min(dataset, function (d) { return d.Rate });
         var yMax = d3.max(dataset, function (d) { return d.Rate });
         console.log(xMin);
