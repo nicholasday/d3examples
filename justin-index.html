@@ -29,22 +29,23 @@
         svg.selectAll("text").data(dataset).enter().append("text").text(function (d) { return d.Rate }).attr("x", function (d, i) { return (barWidth + barPadding) * i + barWidth / 2 }).attr("y", function (d) { return chartHeight - d.Rate * heightScaleFactor }).attr("font-size", "10px").attr("text-anchor", "middle").attr("fill", "blue");
 
         var svg2 = d3.select("body").append("svg");
+        svg2.append("text").text("Homicide Rate In the US from 1960 to 2011").attr("x", (chartWidth + 2 * padding) / 2).attr("y", padding/2).attr("text-size", "40px").attr("fill", "black").attr("text-anchor", "middle");
         svg2.attr("width", width);
         svg2.attr("height", height);
         var circleScalingFactor = 10 / d3.max(dataset, function (d) { return d.Rate });
         var xMin = d3.min(dataset, function (d) { return d.Year });
         var xMax = d3.max(dataset, function (d) { return d.Year });
-        var yMin = d3.min(dataset, function (d) { return parseInt(d.Rate) });
-        var yMax = d3.max(dataset, function (d) { return parseInt(d.Rate) });
+        var yMin = d3.min(dataset, function (d) { return parseFloat(d.Rate) });
+        var yMax = d3.max(dataset, function (d) { return parseFloat(d.Rate) });
         var x = d3.scaleLinear().domain([xMin, xMax]).range([10, chartWidth]);
-        var y = d3.scaleLinear().domain([yMin, yMax]).range([0, chartHeight]);
+        var y = d3.scaleLinear().domain([yMin, yMax]).range([chartHeight, 0]);
         var xAxis = d3.axisBottom().scale(x);
         var yAxis = d3.axisLeft().scale(y);
-        svg2.append("g").attr("class", "x axis").attr("transform", "translate("+parseInt(padding)+", + parseInt(chartHeight+padding) + ")").call(xAxis);
-        svg2.append("g").attr("class", "y axis").attr("transform", "translate(" + padding + ",0)").call(yAxis);
-        var line=d3.line().x(function(d){return x(d.Year)+padding}).y(function(d){return chartHeight+padding-y(d.Rate)});
+        svg2.append("g").attr("class", "x axis").attr("transform", "translate("+parseFloat(padding)+"," + parseFloat(chartHeight+padding) + ")").call(xAxis);
+        svg2.append("g").attr("class", "y axis").attr("transform", "translate(" + padding + ","+parseFloat(padding)+")").call(yAxis);
+        var line=d3.line().x(function(d){return x(d.Year)+padding}).y(function(d){return padding+y(d.Rate)});
         svg2.append("path").attr("d", line(dataset)).attr("stroke-width",1).attr("fill","none").attr("stroke","red");
-        svg2.selectAll("circle").data(dataset).enter().append("circle").attr("r", function (d) { return d.Rate * circleScalingFactor }).attr("cx", function (d) { return (x(d.Year)+padding)}).attr("cy", function(d){return chartHeight+padding-y(d.Rate)}).attr("fill", "black");
+        svg2.selectAll("circle").data(dataset).enter().append("circle").attr("r", function (d) { return d.Rate * circleScalingFactor }).attr("cx", function (d) { return (x(d.Year)+padding)}).attr("cy", function(d){return padding+y(d.Rate)}).attr("fill", "black");
     }
 
 </script>

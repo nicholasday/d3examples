@@ -72,47 +72,60 @@
             ;
             
 //ScatterPlot
-            var h2 = h-30;
+            var h2 = h;
             var w2 = w-30
-
+            var hChart = h2-30
+            
+            var svg2 = d3.select("body")
+                .append("svg")
+                .attr("width",w2+45)
+                .attr("height",h2);
+            
             var x = d3.scaleLinear()
-                .domain(d3.extent(dataset, function(d){
+                .domain([
+                    d3.min(dataset, function(d){
+                    return parseInt(d.Year);
+                    })
+                    ,d3.max(dataset, function(d){
                     return d.Year;
-                }))
+                    })
+                ])
                 .range([15, w2]);
             var y = d3.scaleLinear()
-                .domain(d3.extent(dataset, function(d){
-                    return parseInt(d.Rate);
-                }))
-                .range([h2,15]);
-            
-//            var yAxis = d3.axisLeft(y);
-//            var xAxis = d3.svg.axis()
-//                .scale(x)
-//                .orient("bottom");
-//            svg.append("g")
-//                .call(d3.svg.axis()
-//                .scale(x)
-//                .orient("bottom"));
+                .domain([0,d3.max(dataset, function(d){
+                    return parseFloat(d.Rate);
+                })])
+                .range([hChart,15]);
 
-            var svg = d3.select("body")
-                .append("svg")
-                .attr("width", w2+15)
-                .attr("height", h2+15);
+            var base_g = svg2.append("g")
+                .attr("transform", "translate(" + 30 + "," + 0 + ")") // y axis distance from left, axis distance from top
+                .append("g");
+            
+            var xAxis = d3.axisBottom(x);
+            var gX = base_g.append("g")
+               .attr("class", "x axis")
+               .attr("transform", "translate(0," + hChart + ")")
+               .call(xAxis);
+            var yAxis = d3.axisLeft(y);
+            var gY = base_g.append("g")
+                .attr("class", "y axis")
+                .attr("transform", "translate(0," + 0 + ")")
+                .call(yAxis);
+            
             var lineFunction = d3.line()
-                .x(function(d) { return x(d.Year)})
+                .x(function(d) { return x(d.Year)+30})
                 .y(function(d) { return y(d.Rate)});
-            var lineGraph = svg.append("path")
+            var lineGraph = svg2.append("path")
                 .attr("d", lineFunction(dataset))
                 .attr("stroke", "blue")
                 .attr("stroke-width", 2)
                 .attr("fill", "none");
-            svg.selectAll("circle")
+            svg2.selectAll("circle")
                 .data(dataset)
                 .enter()
                 .append("circle")
                 .attr("cx", function(d){
-                  return x(d.Year);
+                  return x(d.Year)+30;
                 })
                 .attr("cy", function(d){
                   return y(d.Rate);
@@ -121,22 +134,22 @@
                   return 5;
                   //return Math.sqrt(h-y(d.Rate))
             });
-            svg.selectAll("text")
-                .data(dataset)
-                .enter()
-                .append("text")
-                .text(function(d){
-                    return d.Year + "," + d.Rate;
-                })
-                .attr("x", function(d) {
-                    return x(d.Year);
-                })
-                .attr("y", function(d) {
-                    return y(d.Rate);    
-                })
-                .attr("font-family", "sans-serif")
-                .attr("font-size",  "11px")
-                .attr("fill", "red");
+//            svg2.selectAll("text")
+//                .data(dataset)
+//                .enter()
+//                .append("text")
+//                .text(function(d){
+//                    return d.Year + "," + d.Rate;
+//                })
+//                .attr("x", function(d) {
+//                    return x(d.Year);
+//                })
+//                .attr("y", function(d) {
+//                    return y(d.Rate);    
+//                })
+//                .attr("font-family", "sans-serif")
+//                .attr("font-size",  "11px")
+//                .attr("fill", "red");
             }
         </script>
     </body>
