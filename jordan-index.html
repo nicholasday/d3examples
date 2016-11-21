@@ -91,8 +91,8 @@
             .attr("width", w2+15)
             .attr("height", h2+15);
           var lineFunction = d3.line()
-              .x(function(d) { return d.Year})
-              .y(function(d) { return d.Rate})
+              .x(function(d) { return x(d.Year)})
+              .y(function(d) { return y(d.Rate)});
           var lineGraph = svg.append("path")
                 .attr("d", lineFunction(dataset))
                 .attr("stroke", "blue")
