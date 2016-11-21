@@ -58,8 +58,8 @@
 		}
 
     function scatterPlot() {
-      var w = 800;
-      var h = 400;
+      var w = 1000;
+      var h = 600;
       var xScale = d3.scaleLinear()
             .domain(d3.extent(dataset, function(d) {
               return d.Year;
@@ -70,12 +70,19 @@
               return parseFloat(d.Number.replace(/,/g, ''));
             }))
             .range([h-10,15])
-
-
       var svg = d3.select("body")
             .append("svg")
             .attr("width", w)
             .attr("height", h);
+
+      var lineFunction = d3.line()
+            .x(function(d){ return xScale(d.Year) })
+            .y(function(d){ return yScale(d.Number.replace(/,/g, '')) })
+      var lineGraph = svg.append("path")
+            .attr("d", lineFunction(dataset))
+            .attr("stroke", "blue")
+            .attr("stroke-width", 2)
+            .attr("fill", "none");
       svg.selectAll("circle")
             .data(dataset)
             .enter()
@@ -100,7 +107,7 @@
             })
             .attr("x", function(d) {
               //return d[0];
-              return xScale(d.Year);
+              return xScale(d.Year) + 7;
             })
             .attr("y", function(d) {
               //return d[1];
