@@ -18,14 +18,10 @@
 		var dataset;
 
 		d3.csv("HomicideDataset.csv", function(data) {
-   		  dataset = data;
+   		dataset = data;
 		  console.log(data); //Log output to console
-		  chapterSixSvgBars();
+		  scatterPlot();
 
-		});
-
-		d3.json("YouthTobaccoUse.json", function(json) {
-   		 console.log(json);  //Log output to console
 		});
 
 ////////////////Functions////////////////////////
@@ -34,13 +30,13 @@
 		   return n % 2 == 0;
 		}
 
-		function printExcel() {
+		function printExcel() { // simply prints out specified data to the html
 		  d3.select("body").selectAll("p")
     		    .data(dataset)
     		    .enter()
     		    .append("p")
     		    .text(function(d) { return d.Number.split(",").join("") + " | " + d.Rate + " | " + d.Year ; })
-		    .style("color", function(d) { 
+		    .style("color", function(d) {
 		      if (isEven(parseInt(d.Number.split(",").join("")))) {
 			return "black";
 		      } else {
@@ -49,7 +45,7 @@
 		    });
 		}
 
-		function chapterSixHtmlBars() {
+		function chapterSixHtmlBars() { // adding bars using html only (css with div elements)
 		  d3.select("body").selectAll("div")
     		    .data(dataset)
     		    .enter()
@@ -61,10 +57,66 @@
 		    });
 		}
 
-		function chapterSixSvgBars() {
+    function scatterPlot() {
+      var w = 1000;
+      var h = 1000;
+      var xScale = d3.scaleLinear()
+            .domain(d3.extent(dataset, function(d) {
+              return d.Year;
+            }))
+            .range([15,w])
+      var yScale = d3.scaleLinear()
+            .domain(d3.extent(dataset, function(d) {
+              return parseFloat(d.Number.replace(/,/g, ''));
+            }))
+            .range([h,15])
+
+
+      var svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+      svg.selectAll("circle")
+            .data(dataset)
+            .enter()
+            .append("circle")
+            .attr("cx", function(d) {
+              return xScale(d.Year);
+            })
+            .attr("cy", function(d){
+              //return d[1];
+              //return "50";
+              return yScale(parseFloat(d.Number.replace(/,/g, '')));
+              //return yScale(d[1]);
+            })
+            .attr("r", 5);
+      svg.selectAll("text")
+            .data(dataset)
+            .enter()
+            .append("text")
+            .text(function(d) {
+              //return d[0] + "," + d[1];
+              return d.Year + "," + d.Number;
+            })
+            .attr("x", function(d) {
+              //return d[0];
+              return d.Year;
+            })
+            .attr("y", function(d) {
+              //return d[1];
+              return parseFloat(d.Number.replace(/,/g, ''));
+            })
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "11px")
+            .attr("fill", "red");
+
+    }
+
+		function chapterSixSvgBars() { // adding bar graph with svg objects
 		  var w = 1500;
 		  var h = 100;
 		  var barPadding = 1;
+
 
 		  var svg = d3.select("body")
 		    .append("svg")
@@ -111,7 +163,7 @@
 
 		}
 
-		function chapterSixSvgCircles() {
+		function chapterSixSvgCircles() { // creates svg circles
 		  var h = 50;
 		  var w = 1000;
 		  var svg = d3.select("body")
@@ -123,7 +175,7 @@
     		    .data(dataset)
    		    .enter()
     		    .append("circle");
-			
+
 		  circles.attr("cx", function(d, i) {
             	    	  return (i * 25) + 12.5;
         	 	})
@@ -136,12 +188,12 @@
 			.attr("stroke-width", function(d) {
 			  return d.Rate / 4
 			});
-			
+
 
 
 		}
 
-		function svgPractice() {
+		function svgPractice() { // one black rectange for each data object
 		  var w = 1000;
 		  var h = 400;
 		  var svg = d3.select("body")
