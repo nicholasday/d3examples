@@ -38,7 +38,7 @@
         var x = d3.scaleLinear().domain([xMin, xMax]).range([10, chartWidth]);
         var y = d3.scaleLinear().domain([yMin, yMax]).range([0, chartHeight]);
         var line=d3.line().x(function(d){return x(d.Year)}).y(function(d){return chartHeight-y(d.Rate)});
-        svg.append("path").attr("d", line(dataset));
+        svg.append("path").attr("d", line(dataset)).attr("stroke-width",1).attr("fill","red");
         svg.selectAll("circle").data(dataset).enter().append("circle").attr("r", function (d) { return d.Rate * circleScalingFactor }).attr("cx", function (d) { return (x(d.Year))}).attr("cy", function(d){return chartHeight-y(d.Rate)}).attr("fill", "black");
     }
 
