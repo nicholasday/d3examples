@@ -29,7 +29,7 @@
         svg.selectAll("text").data(dataset).enter().append("text").text(function (d) { return d.Rate }).attr("x", function (d, i) { return (barWidth + barPadding) * i + barWidth / 2 }).attr("y", function (d) { return chartHeight - d.Rate * heightScaleFactor }).attr("font-size", "10px").attr("text-anchor", "middle").attr("fill", "blue");
 
         var svg2 = d3.select("body").append("svg");
-        svg2.append("text").text("Homicide Rate In the US from 1960 to 2011").attr("x", (chartWidth + 2 * padding) / 2).attr("y", padding).attr("text-size", "40px").attr("fill", "black").attr("text-anchor", "middle");
+        svg2.append("text").text("Homicide Rate In the US from 1960 to 2011").attr("x", (chartWidth + 2 * padding) / 2).attr("y", padding/2).attr("text-size", "40px").attr("fill", "black").attr("text-anchor", "middle");
         svg2.attr("width", width);
         svg2.attr("height", height);
         var circleScalingFactor = 10 / d3.max(dataset, function (d) { return d.Rate });
