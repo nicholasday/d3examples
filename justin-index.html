@@ -35,6 +35,10 @@
         var xMax = d3.max(dataset, function (d) { return d.year });
         var yMin = d3.min(dataset, function (d) { return d.Rate });
         var yMax = d3.max(dataset, function (d) { return d.Rate });
+        console.log(xMin);
+        console.log(xMax);
+        console.log(yMin);
+        console.log(yMax);
         var x = d3.scaleLinear().domain([xMin, xMax]).range([10, chartWidth]);
         var y = d3.scaleLinear().domain([yMin, yMax]).range([0, chartHeight]);
         svg.selectAll("circle").data(dataset).enter().append("circle").attr("r", function (d) { return d.Rate * circleScalingFactor }).attr("cx", function (d) { return (x(d.Year))}).attr("cy", function(d){return y(d.Rate)}).attr("fill", "black");
