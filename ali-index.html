@@ -162,6 +162,36 @@
                 yAxisObject.call(yAxis.scale(d3.event.transform.rescaleY(yScale)));
             }
 
+            var tooltip = d3.select("body")
+                .append("div")
+                .style("display", "none")
+                .style("background-color", "white")
+                .style("padding", 5)
+                .style("border-radius", "6px")
+                .style("border", "1px solid black")
+                .style("position", "absolute");
+
+            svg.selectAll("circle")
+                .on('mouseover', function(data) {
+                    d3.select(this)
+                        .transition()
+                        .attr("fill", "orange")
+
+                    var coordinates = d3.mouse(this);
+                    var x = coordinates[0];
+                    var y = coordinates[1];
+                    tooltip.style("display", "block")
+                        .style("left", xScale(data.year) - 15)
+                        .style("top", yScale(data.number) - 27)
+                        .text(data.Number);
+                })
+                .on("mouseout", function(d) {
+                    d3.select(this)
+                        .transition()
+                        .attr("fill", "black");
+
+                    tooltip.style("display", "none");
+                });
 
             /*svg.selectAll("text")
                 .data(dataset)
