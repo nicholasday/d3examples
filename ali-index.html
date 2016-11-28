@@ -110,9 +110,18 @@
                 .attr("transform", "translate(" + padding.right + ",0)")
                 .call(yAxis);
 
-            var graphArea = svg.append("g")
-                .attr("class", "graph")
+            svg.append("clipPath")
+                    .attr("id", "clip-path")
+                    .append("rect")
+                    .attr("x", 50)
+                    .attr("y", 17)
+                    .attr("width", w - 100)
+                    .attr("height", h - 36);
 
+            var base_g = svg.append("g")
+                .attr("clip-path", "url(#clip-path)");
+
+            var graphArea = base_g.append("g");
 
             var lineFunction = d3.line()
                 .x(function(d) {
@@ -127,6 +136,7 @@
                 .attr("stroke", "blue")
                 .attr("stroke-width", 2)
                 .attr("fill", "none")
+
 
             graphArea.selectAll("circle")
                 .data(dataset)
