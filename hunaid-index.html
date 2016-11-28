@@ -1,0 +1,132 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>D3 Page Template</title>
+        <script type="text/javascript" src="d3.js"></script>
+    </head>
+    <body>
+        <script type="text/javascript">
+			var dataset;
+			function paragraph(){d3.select("body").selectAll("p")
+				.data(dataset)
+				.enter()
+				.append("p")
+				.text(function(d){
+					return 'Number: ' +d.Number+"\t" +'Rate: '+ d.Rate +"\t"+ 'Year: '+ d.Year;
+				})
+				.style("color", function(d) {
+					if (parseFloat(d.Number.split(",").join("")) > 20000) {   //Threshold of 15
+					return "red";
+					} 
+					if (parseFloat(d.Number.split(",").join("")) > 15000&&parseFloat(d.Number.split(",").join(""))<20000) {   //Threshold of 15
+					return "orange";
+					}
+					if (parseFloat(d.Number.split(",").join("")) > 10000&&parseFloat(d.Number.split(",").join(""))<15000) {   //Threshold of 15
+					return "yellow";
+					}else {
+					return "green";
+					}
+				});
+				}
+				
+			function barGraph(){
+				var w=1000;
+				var h=400;
+				var barPadding=1;
+				var svg=d3.select("body")
+				.append("svg")
+				.attr("width", w)
+				.attr("height", h);
+				 svg.selectAll("rect")
+                .data(dataset)
+                .enter()
+                .append("rect")
+                .attr("x", function(d, i) { return i * (w / dataset.length); })
+                .attr("y", function(d) { return h - (d.Rate * 20); })
+                .attr("width", w / dataset.length-barPadding)
+                .attr("height", function(d) { return d.Rate*20; })
+                .attr("fill", function(d) { return "rgb("+(d.Rate*20)+", 0, " + (d.Rate * 20) + ")"; })
+			}
+			
+			function scatterPlot(){
+				var w=1000;
+				var h=400;
+				var chartH=h-30;
+				var svg2=d3.select("body")
+				.append("svg")
+				.attr("width", w)
+				.attr("height", h)
+				var x = d3.scaleLinear()
+					.domain([
+                    d3.min(dataset, function(d){
+						return parseInt(d.Year);
+                    })
+                    ,d3.max(dataset, function(d){
+						return d.Year;
+                    })
+					])
+					.range([15, w]);
+				var y = d3.scaleLinear()
+					.domain([0,d3.max(dataset, function(d){
+						return parseFloat(d.Rate);
+					})])
+					.range([chartH,15]);
+				var base_g = svg2.append("g")
+					.attr("transform", "translate(" + 30 + "," + 0 + ")") // y axis distance from left, axis distance from top
+					.append("g");
+            
+				var xAxis = d3.axisBottom(x);
+				var gX = base_g.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(0," + chartH + ")")
+					.call(xAxis);
+				var yAxis = d3.axisLeft(y);
+				var gY = base_g.append("g")
+					.attr("class", "y axis")
+					.attr("transform", "translate(0," + 0 + ")")
+					.call(yAxis);
+					
+				var zoom = d3.zoom()
+                     .scaleExtent([1/2, 3])
+                     .on("zoom", zoomed);
+				svg2.call(zoom);
+    
+				function zoomed() {
+					svg2.attr("transform", d3.event.transform);
+					gX.call(xAxis.scale(d3.event.transform.rescaleX(x)));
+					gY.call(yAxis.scale(d3.event.transform.rescaleY(y)));
+				}
+				
+				svg2.selectAll("circle")
+				.data(dataset)
+				.enter()
+				.append("circle")
+				 .attr("cx", function(d){
+                  return x(d.Year)+30;
+                })
+                .attr("cy", function(d){
+                  return y(d.Rate);
+                })
+                .attr("r", function(d){
+                  return (d.Rate/10)*9;
+				})
+				.attr("fill", function(d) { return "rgb("+(d.Rate*20)+", 0, " + (d.Rate * 20) + ")"; })
+			}
+			
+			d3.csv("HomicideDataset.csv", function(data) {
+				console.log(data);  //Log output to console
+				dataset=data;
+				scatterPlot();
+				barGraph();
+				paragraph();
+			});
+			
+
+			
+			//d3.json("YouthTobaccoUse.json", function(json) {
+			//	console.log(json);  //Log output to console
+			//});
+			
+        </script>
+    </body>
+</html>
