@@ -42,10 +42,7 @@
                 .append("svg")
                 .attr("width",w)
                 .attr("height",h);
-//              .call(d3.zoom().on("zoom", function () {
-//              svg.attr("transform", d3.event.transform)
-//              }))
-//              .append("g")
+
             svg.selectAll("rect")
                 .data(dataset)
                 .enter()
@@ -84,7 +81,7 @@
                 .append("svg")
                 .attr("width",w2+45)
                 .attr("height",h2);
-              
+                
             
             var x = d3.scaleLinear()
                 .domain([
@@ -104,23 +101,14 @@
 
             var base_g = svg2.append("g")
                 .attr("transform", "translate(" + 30 + "," + 0 + ")") // y axis distance from left, axis distance from top
-                .append("g");
+                
+            var g = base_g.append("g");
             
             var xAxis = d3.axisBottom(x);
             var gX = base_g.append("g")
                .attr("class", "x axis")
                .attr("transform", "translate(0," + hChart + ")")
                .call(xAxis);
-            
-            var zoom = d3.zoom()
-                .scaleExtent([1/2,3])
-                .on("zoom", zoomed)
-            svg2.call(zoom)
-            
-            function zoomed(){
-                gX.call(xAxis.scale(d3.event.transform.rescaleX(x)))
-                gY.call(yAxis.scale(d3.event.transform.rescaleY(y)))
-            }
             
             var yAxis = d3.axisLeft(y);
             var gY = base_g.append("g")
@@ -131,12 +119,12 @@
             var lineFunction = d3.line()
                 .x(function(d) { return x(d.Year)+30})
                 .y(function(d) { return y(d.Rate)});
-            var lineGraph = svg2.append("path")
+            var lineGraph = g.append("path")
                 .attr("d", lineFunction(dataset))
                 .attr("stroke", "blue")
                 .attr("stroke-width", 2)
                 .attr("fill", "none");
-            svg2.selectAll("circle")
+            g.selectAll("circle")
                 .data(dataset)
                 .enter()
                 .append("circle")
@@ -150,6 +138,21 @@
                   return 5;
                   //return Math.sqrt(h-y(d.Rate))
             });
+            
+            var zoom = d3.zoom()
+                .scaleExtent([1/2,3])
+                .on("zoom", zoomed)
+               
+            svg2.call(zoom)
+            
+            function zoomed(){
+                g.attr("transform",d3.event.transform);
+                gX.call(xAxis.scale(d3.event.transform.rescaleX(x)))
+                gY.call(yAxis.scale(d3.event.transform.rescaleY(y)))
+            }
+            
+            
+            
 //            svg2.selectAll("text")
 //                .data(dataset)
 //                .enter()
