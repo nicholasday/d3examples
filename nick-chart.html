@@ -1,0 +1,187 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>D3 Page Template</title>
+    <script type="text/javascript" src="d3.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+var row = function(d) {
+    obj = {
+        year: parseInt(d.Year),
+        number: parseInt(d.Number.replace(',', '')),
+        rate: parseFloat(d.Rate)
+    };
+    return obj;
+};
+
+d3.csv("HomicideDataset.csv", row, function(data) {
+	var width = 1250;
+    var height = 200;
+	var padding = 30;
+    var leftPadding = 50;
+	var w = 1250 - leftPadding;
+	var h = height - 2 * padding;
+
+    var zeroData = []
+    for (var i=0; i<data.length; i++) {
+        zeroData[i] = {
+            year: 0,
+            number: 0,
+            rate: 0
+        };
+    }
+
+	var yScale = d3.scaleLinear()
+				   .domain(d3.extent(zeroData, function(d) {
+				       return d.number;
+                   }))	
+				   .range([h, 0])
+
+	var xScale = d3.scaleBand()
+				   .domain(zeroData.map(function(d) { return d.year; }))
+				   .rangeRound([leftPadding, w])
+				   .paddingInner(0.1);
+
+    var ticks = xScale.domain().filter(function(d,i){ return !(i%10); } );
+
+	var xAxis = d3.axisBottom(xScale)
+				   .tickValues(ticks);
+
+    var yAxis = d3.axisLeft(yScale)
+
+	var color = d3.scaleSequential(d3.interpolatePlasma)
+			      .domain([d3.max(zeroData, function(d) {
+			          return d.number;
+                  }), d3.min(zeroData, function(d) {
+                      return d.number;
+                  })]);
+
+    var svg = d3.select('body')
+                .append('svg');
+
+    svg.attr("width", width)
+	   .attr("height", height);
+
+	svg.append("g")
+		  .attr("class", "x axis")
+		  .attr("transform", "translate(0," + (h) + ")")
+		  .call(xAxis);
+		  //.selectAll("text")
+		  //.style("text-anchor", "end")
+		  //.attr("dx", "-.8em")
+		  //.attr("dy", "-.55em")
+		  //.attr("transform", "rotate(-90)" );
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .attr("transform", "translate(" + leftPadding + ",0)")
+        .call(yAxis);
+
+	var rects = svg.selectAll("rect")
+					 .data(zeroData)
+					 .enter()
+					 .append("rect");
+
+	rects.attr('x', function(d) {
+		     return xScale(d.year);
+		 })
+		 .attr('fill', function(d) {
+		     return color(d.number);
+		 })
+		 .attr('y', function(d) {
+			 return yScale(d.number);
+		 })
+         .attr('width', function(d, i) {
+		     return xScale.bandwidth();
+		 })
+		 .attr('height', function(d) {
+		     return h - yScale(d.number);
+		 });
+
+	yScale.domain(d3.extent(data, function(d) {
+				       return d.number;
+                   }))	
+
+	xScale.domain(data.map(function(d) { return d.year; }))
+
+    ticks = xScale.domain().filter(function(d,i){ return !(i%10); } );
+
+	xAxis.tickValues(ticks);
+
+	color.domain([d3.max(data, function(d) {
+			          return d.number;
+                  }), d3.min(data, function(d) {
+                      return d.number;
+                  })]);
+
+    var t = d3.transition()
+        .duration(1000)
+
+    svg.selectAll("rect")
+         .data(data)
+         .transition(t)
+	     .attr('x', function(d) {
+		     return xScale(d.year);
+		 })
+		 .attr('fill', function(d) {
+		     return color(d.number);
+		 })
+		 .attr('y', function(d) {
+			 return yScale(d.number);
+		 })
+         .attr('width', function(d, i) {
+		     return xScale.bandwidth();
+		 })
+		 .attr('height', function(d) {
+		     return h - yScale(d.number);
+		 });
+
+    var tooltip = d3.select("body")
+        .append("div")
+        .style("display", "none")
+        .style("background-color", "white")
+        .style("padding", 5)
+        .style("border-radius", "6px")
+        .style("border", "1px solid black")
+        .style("position", "absolute");
+
+    svg.selectAll("rect")
+        .on('mouseover', function(data) {
+            d3.select(this)
+                .transition()
+                .attr("fill", "orange")
+
+            var coordinates = d3.mouse(this);
+            var x = coordinates[0];
+            var y = coordinates[1];
+            tooltip.style("display", "block")
+                .style("left", xScale(data.year) - 15)
+                .style("top", yScale(data.number) - 27)
+                .text(data.number);
+        })
+        .on("mouseout", function(d) {
+            d3.select(this)
+                .transition()
+                .attr("fill", color(d.number));
+
+            tooltip.style("display", "none");
+        });
+
+    //Update Y axis
+    svg.select(".y.axis")
+        .transition(t)
+        .call(yAxis);
+
+    // Update X axis
+    svg.select(".x.axis")
+        .transition(t)
+        .call(xAxis);
+
+});
+
+d3.json("YouthTobaccoUse.json", function(json) {
+});
+</script>
+</body>
+</html>

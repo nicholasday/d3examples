@@ -1,0 +1,124 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>D3 Page Template</title>
+    <script type="text/javascript" src="d3.js"></script>
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+</head>
+<body>
+<script type="text/javascript">
+var row = function(d) {
+    obj = {
+        year: parseInt(d.Year),
+        number: parseInt(d.Number.replace(',', '')),
+        rate: parseFloat(d.Rate)
+    };
+    return obj;
+};
+
+d3.csv("HomicideDataset.csv", row, function(data) {
+    var margin = {top: 20, right: 20, bottom: 20, left: 20};
+    var padding = {top: 0, right: 0, bottom: 30, left: 60}
+
+    var outerWidth = 960;
+    var outerHeight = 500;
+
+    var innerWidth = outerWidth - margin.left - margin.right;
+    var innerHeight = outerHeight - margin.top - margin.bottom;
+
+    var width = innerWidth - padding.left - padding.right;
+    var height = innerHeight - padding.top - padding.bottom;
+
+    var svg = d3.select("body")
+					.append("svg")
+					.attr("width", outerWidth)
+					.attr("height", outerHeight);
+
+    svg.append("clipPath")
+            .attr("id", "graph-area")
+            .append("rect")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", width)
+            .attr("height", height);
+
+    var base_g = svg.append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                    .append("g")
+                    .attr("transform", "translate(" + padding.left + "," + padding.top + ")") 
+
+
+    var clip_g = base_g.append("g")
+                  .attr("clip-path", "url(#graph-area)");
+
+
+    var g = clip_g.append("g");
+
+	var y = d3.scaleLinear()
+				   .domain(d3.extent(data, function(d) {
+				       return d.number;
+                   }))	
+				   .range([height, 0])
+
+	var x = d3.scaleLinear()
+				   .domain(d3.extent(data, function(d) {
+				       return d.year;
+                   }))	
+				   .range([0, width])
+
+    svg.append("text")             
+        .attr("x", width/2 + padding.left)
+        .attr("y",  height + padding.bottom + 40)
+        .style("text-anchor", "middle")
+        .text("Year");
+
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", margin.left - 15)
+        .attr("x", 0 - ((height + margin.top) / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Number");
+
+	var xAxis = d3.axisBottom(x)
+
+    var yAxis = d3.axisLeft(y)
+
+	var gX = base_g.append("g")
+                   .attr("class", "x axis")
+		           .attr("transform", "translate(0," + height + ")")
+		           .call(xAxis);
+
+    var gY = base_g.append("g")
+                   .attr("class", "y axis")
+                   .call(yAxis);
+
+    var line = d3.line()
+                     .x(function(d) { return x(d.year); })
+                     .y(function(d) { return y(d.number); });
+
+    var lineGraph = g.append("path")
+                           .attr("d", line(data))
+                           .attr("stroke", "blue")
+                           .attr("stroke-width", 2)
+                           .attr("fill", "none")
+
+    var zoom = d3.zoom()
+                     .scaleExtent([1/2, 3])
+                     .on("zoom", zoomed);
+
+    svg.call(zoom);
+    
+    function zoomed() {
+        g.attr("transform", d3.event.transform);
+        gX.call(xAxis.scale(d3.event.transform.rescaleX(x)));
+        gY.call(yAxis.scale(d3.event.transform.rescaleY(y)));
+    }
+
+});
+
+d3.json("YouthTobaccoUse.json", function(json) {
+});
+</script>
+</body>
+</html>
